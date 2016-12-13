@@ -1,0 +1,43 @@
+﻿@model NJira.WebUI.Models.IssueViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Total: @ViewBag.Count</h2>
+
+
+
+@using (Html.BeginForm("Index", "Transaction"))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Summary</th>
+                <th>Status</th>
+                <th>Selected</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (int i = 0; i < Model.Issues.Count; i++)
+                {
+                <tr>
+
+                    <td>@Model.Issues[i].Issue.Key</td>
+                    <td>@Model.Issues[i].Issue.Summary</td>
+                    <td>@Model.Issues[i].Issue.Status </td>
+                    <td>@Html.CheckBoxFor(m => Model.Issues[i].IsSelected, new { @class = "form-control" })</td>
+                    <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Key)</td>
+                    <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Status)</td>
+                    <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Summary)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Select</button>
+}
+
+
+
