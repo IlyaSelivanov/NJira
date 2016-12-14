@@ -84,6 +84,7 @@
     <Compile Include="Abstract\IIssueRepository.cs" />
     <Compile Include="Concrete\IssueRepository.cs" />
     <Compile Include="Concrete\JiraContext.cs" />
+    <Compile Include="Entities\Cart.cs" />
     <Compile Include="Entities\Issue.cs" />
     <Compile Include="Entities\SearchModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

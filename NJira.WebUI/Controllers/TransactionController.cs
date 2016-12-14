@@ -19,10 +19,24 @@ namespace NJira.WebUI.Controllers
             repository = issueRepository;
         }
 
-        // GET: Transaction
-        public async Task<ActionResult> Index(IssueViewModel issuesVM)
+        public ActionResult Index(Cart cart)
         {
-            foreach(var i in issuesVM.Issues.Where(c => c.IsSelected))
+            Cart c = cart;
+
+            return View(c);
+        }
+
+        public RedirectToRouteResult AddToCart(Cart cart, IssueViewModel issuesVM)
+        {
+            foreach (var issue in issuesVM.Issues.Where(c => c.IsSelected))
+                cart.AddItem(issue.Issue);
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Transact(IssueViewModel issuesVM)
+        {
+            foreach (var i in issuesVM.Issues.Where(c => c.IsSelected))
             {
                 var issue = repository.Issues.Where(x => x.Key == i.Issue.Key).ElementAt(0);
                 await issue.WorkflowTransitionAsync("Back to review");

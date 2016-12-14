@@ -26,10 +26,6 @@ namespace NJira.WebUI.Controllers
 
             var issues = from i in repository.Issues
                          where i.FixVersions == searchModel.Version
-                            && (
-                                i.Status == "Tested on dev54"
-                                || i.Status == "Tested on stage"
-                            )
                          select i;
 
             if (searchModel.Status != null && !searchModel.Status.Equals("All"))
@@ -37,7 +33,7 @@ namespace NJira.WebUI.Controllers
 
             ViewBag.Count = issues.Count();
 
-            foreach (var issue in issues)
+            foreach (var issue in issues.OrderBy(i => i.Status))
             {
                 issuesVM.Issues.Add(new IssueLine
                 {

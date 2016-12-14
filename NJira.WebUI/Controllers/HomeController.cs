@@ -16,14 +16,24 @@ namespace NJira.WebUI.Controllers
         // GET: Home
         public async Task<ActionResult> Index()
         {
-            var versions = await jiraContext.Jira.Versions.GetVersionsAsync("PVINE");
-            //var statuses = await jiraContext.Jira.Statuses.GetStatusesAsync();
-            var statuses = new List<string> { "Tested on dev54", "Tested on stage" };
+            IEnumerable<Atlassian.Jira.ProjectVersion> versions;
+            IEnumerable<Atlassian.Jira.IssueStatus> statuses;
+
+            try
+            {
+                versions = await jiraContext.Jira.Versions.GetVersionsAsync("PVINE");
+                statuses = await jiraContext.Jira.Statuses.GetStatusesAsync();
+            }
+            catch(Exception ex)
+            {
+                var exc = ex.Message;
+                return RedirectToAction("Oops", "Error");
+            }
 
             var searchModel = new SearchModel();
 
             var verList = new List<SelectListItem>();
-            foreach(var version in versions.Where(v => v.IsReleased == false))
+            foreach(var version in versions.Where(v => v.IsReleased == false).OrderByDescending(v => v.Id))
             {
                 verList.Add(new SelectListItem
                 {
@@ -41,18 +51,18 @@ namespace NJira.WebUI.Controllers
                 Text = "All"
             });
 
-            //foreach (var status in statuses.OrderBy(s => s.Name))
-            foreach (var status in statuses)
+            foreach (var status in statuses.OrderBy(s => s.Name))
             {
                 statList.Add(new SelectListItem
                 {
-                    //Value = status.Name,
-                    //Text = status.Name
-                    Value = status,
-                    Text = status
+                    Value = status.Name,
+                    Text = status.Name
                 });
             }
             searchModel.Statuses = statList;
+
+            if (searchModel.Statuses == null || searchModel.Versions == null)
+                return RedirectToAction("Oops", "Error");
 
             return View(searchModel);
         }
