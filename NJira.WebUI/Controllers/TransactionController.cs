@@ -80,6 +80,11 @@ namespace NJira.WebUI.Controllers
             var locations = new List<SelectListItem>();
             locations.Add(new SelectListItem
             {
+                Value = "QA",
+                Text = "QA"
+            });
+            locations.Add(new SelectListItem
+            {
                 Value = "Dev54",
                 Text = "Dev54"
             });
