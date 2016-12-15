@@ -14,6 +14,7 @@ namespace NJira.WebUI.Controllers
         private JiraContext jiraContext = new JiraContext();
 
         // GET: Home
+        [Authorize]
         public async Task<ActionResult> Index()
         {
             IEnumerable<Atlassian.Jira.ProjectVersion> versions;
