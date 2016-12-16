@@ -1,0 +1,39 @@
+﻿@model NJira.WebUI.Models.Auth.RegisterModel
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Register</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(false)
+
+    <div class="form-group">
+        <p>Email</p>
+        @Html.EditorFor(model => model.Email, new { @class = "form-control" })
+    </div>
+
+
+    <div class="form-group">
+        <p>Birth Year</p>
+        @Html.EditorFor(model => model.Year, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <p>Password</p>
+        @Html.EditorFor(model => model.Password, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <p>Reapeat Password</p>
+        @Html.EditorFor(model => model.PasswordConfirm, new { @class = "form-control" })
+    </div>
+
+    <p></p>
+    <input class="btn btn-primary" type="submit" value="Зарегистрировать" />
+}
+

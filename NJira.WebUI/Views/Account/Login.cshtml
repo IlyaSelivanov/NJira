@@ -1,7 +1,27 @@
-﻿
+﻿@model NJira.WebUI.Models.Auth.LoginModel
+
 @{
     ViewBag.Title = "Login";
 }
 
 <h2>Login</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.ValidationSummary()
+        <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
+        <p>
+            <label>Email</label><br />
+            @Html.EditorFor(x => x.Email, new { @class = "form-control" })
+        </p>
+        <p>
+            <label>Пароль</label><br />
+            @Html.EditorFor(x => x.Password, new { @class = "form-control" })
+        </p>
+        <p><button class="btn btn-primary" type="submit">Войти</button></p>
+    </div>
+}
 
