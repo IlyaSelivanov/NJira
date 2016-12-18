@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace NJira.WebUI.Controllers
 {
+    [Authorize]
     public class IssueController : Controller
     {
         IIssueRepository repository;

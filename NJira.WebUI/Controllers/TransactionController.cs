@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace NJira.WebUI.Controllers
 {
+    [Authorize]
     public class TransactionController : Controller
     {
         IIssueRepository repository;

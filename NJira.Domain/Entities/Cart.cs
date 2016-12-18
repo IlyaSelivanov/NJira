@@ -31,5 +31,10 @@ namespace NJira.Domain.Entities
                 Issues.Add(issue);
             }
         }
+
+        public void ClearCart()
+        {
+            Issues.Clear();
+        }
     }
 }

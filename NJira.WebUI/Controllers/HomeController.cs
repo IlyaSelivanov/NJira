@@ -9,12 +9,12 @@ using System.Web.Mvc;
 
 namespace NJira.WebUI.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private JiraContext jiraContext = new JiraContext();
 
         // GET: Home
-        [Authorize]
         public async Task<ActionResult> Index()
         {
             IEnumerable<Atlassian.Jira.ProjectVersion> versions;

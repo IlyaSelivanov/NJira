@@ -16,7 +16,7 @@
                 <th>Key</th>
                 <th>Summary</th>
                 <th>Status</th>
-                <th>Check All <input type="checkbox" id="checkall"/></th>
+                <th><input type="checkbox" id="checkall"/></th>
             </tr>
         </thead>
 
@@ -28,7 +28,7 @@
                     <td>@Model.Issues[i].Issue.Key</td>
                     <td>@Model.Issues[i].Issue.Summary</td>
                     <td>@Model.Issues[i].Issue.Status </td>
-                    <td>@Html.CheckBoxFor(m => Model.Issues[i].IsSelected, new { @class = "form-control" })</td>
+                    <td>@Html.CheckBoxFor(m => Model.Issues[i].IsSelected, new { @class = "checkbox" })</td>
                     <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Key)</td>
                     <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Status)</td>
                     <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Summary)</td>
@@ -38,4 +38,13 @@
     </table>
     <button type="submit" class="btn btn-primary">Select</button>
 }
+
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#checkall").click(function(){
+            $("input:checkbox:not(#checkall)").attr("checked", $(this).is(":checked"));
+        })
+    });
+</script>
 

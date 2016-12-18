@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using NJira.Domain.Entities;
 using NJira.WebUI.Models.Auth;
 using System;
 using System.Collections.Generic;
@@ -98,8 +99,10 @@ namespace NJira.WebUI.Controllers
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        public ActionResult LogOff(Cart cart)
         {
+            cart.ClearCart();
+
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
