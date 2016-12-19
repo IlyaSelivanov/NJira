@@ -6,8 +6,6 @@
 
 <h2>Total: @ViewBag.Count</h2>
 
-
-
 @using (Html.BeginForm("AddToCart", "Transaction"))
 {
     <table class="table">
@@ -16,35 +14,34 @@
                 <th>Key</th>
                 <th>Summary</th>
                 <th>Status</th>
-                <th><input type="checkbox" id="checkall"/></th>
+                <th><input type="checkbox" id="checkall" /></th>
             </tr>
         </thead>
 
         <tbody>
             @for (int i = 0; i < Model.Issues.Count; i++)
-                {
+            {
                 <tr>
-
                     <td>@Model.Issues[i].Issue.Key</td>
-                    <td>@Model.Issues[i].Issue.Summary</td>
+                    @{ string url = "http://pm.quartsoft.com/browse/" + @Model.Issues[i].Issue.Key; }
+                    <td><a href=@url>@Model.Issues[i].Issue.Summary</a></td>
                     <td>@Model.Issues[i].Issue.Status </td>
                     <td>@Html.CheckBoxFor(m => Model.Issues[i].IsSelected, new { @class = "checkbox" })</td>
                     <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Key)</td>
                     <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Status)</td>
                     <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Summary)</td>
                 </tr>
-            }
+                        }
         </tbody>
     </table>
     <button type="submit" class="btn btn-primary">Select</button>
-}
+                        }
 
 <script src="~/Scripts/jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        $("#checkall").click(function(){
-            $("input:checkbox:not(#checkall)").attr("checked", $(this).is(":checked"));
+    $(document).ready(function () {
+        $("#checkall").click(function () {
+            $("input:checkbox:not(#checkall)").prop("checked", $(this).is(":checked"));
         })
     });
 </script>
-
