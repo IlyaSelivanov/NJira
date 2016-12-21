@@ -36,7 +36,7 @@ namespace NJira.WebUI.Controllers
 
             ViewBag.Count = issues.Count();
 
-            foreach (var issue in issues.OrderBy(i => i.Status))
+            foreach (var issue in issues.OrderBy(i => i.Assignee))
             {
                 issuesVM.Issues.Add(new IssueLine
                 {
@@ -44,7 +44,10 @@ namespace NJira.WebUI.Controllers
                     {
                         Key = issue.Key.Value,
                         Summary = issue.Summary,
-                        Status = issue.Status.Name
+                        Status = issue.Status.Name,
+                        Resolution = issue.Resolution.Name,
+                        Assignee = issue.Assignee,
+                        Reporter = issue.Reporter
                     },
                     IsSelected = false
                 });

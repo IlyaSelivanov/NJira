@@ -14,6 +14,9 @@
                 <th>Key</th>
                 <th>Summary</th>
                 <th>Status</th>
+                <th>Resolution</th>
+                <th>Assignee</th>
+                <th>Reporter</th>
                 <th><input type="checkbox" id="checkall" /></th>
             </tr>
         </thead>
@@ -25,11 +28,17 @@
                     <td>@Model.Issues[i].Issue.Key</td>
                     @{ string url = "http://pm.quartsoft.com/browse/" + @Model.Issues[i].Issue.Key; }
                     <td><a href=@url>@Model.Issues[i].Issue.Summary</a></td>
-                    <td>@Model.Issues[i].Issue.Status </td>
+                    <td>@Model.Issues[i].Issue.Status</td>
+                    <td>@Model.Issues[i].Issue.Resolution</td>
+                    <td>@Model.Issues[i].Issue.Assignee</td>
+                    <td>@Model.Issues[i].Issue.Reporter</td>
                     <td>@Html.CheckBoxFor(m => Model.Issues[i].IsSelected, new { @class = "checkbox" })</td>
                     <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Key)</td>
                     <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Status)</td>
                     <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Summary)</td>
+                    <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Status)</td>
+                    <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Assignee)</td>
+                    <td>@Html.HiddenFor(m => Model.Issues[i].Issue.Reporter)</td>
                 </tr>
                         }
         </tbody>
