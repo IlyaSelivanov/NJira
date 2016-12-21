@@ -1,5 +1,7 @@
-﻿using NJira.Domain.Concrete;
+﻿using NJira.Domain.Abstract;
+using NJira.Domain.Concrete;
 using NJira.Domain.Entities;
+using NJira.WebUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +14,23 @@ namespace NJira.WebUI.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private JiraContext jiraContext = new JiraContext();
+        IJiraRepository repository;
+
+        public HomeController(IJiraRepository issueRepository)
+        {
+            repository = issueRepository;
+        }
 
         // GET: Home
         public async Task<ActionResult> Index()
         {
-            IEnumerable<Atlassian.Jira.ProjectVersion> versions;
-            IEnumerable<Atlassian.Jira.IssueStatus> statuses;
+            List<string> versions;
+            List<string> statuses;
 
             try
             {
-                versions = await jiraContext.Jira.Versions.GetVersionsAsync("PVINE");
-                statuses = await jiraContext.Jira.Statuses.GetStatusesAsync();
+                versions = await repository.GetVersionsAsync("PVINE");
+                statuses = await repository.GetStatusesAsync();
             }
             catch(Exception ex)
             {
@@ -31,33 +38,33 @@ namespace NJira.WebUI.Controllers
                 return RedirectToAction("Oops", "Error");
             }
 
-            var searchModel = new SearchModel();
+            var searchModel = new SearchViewModel();
 
             var verList = new List<SelectListItem>();
-            foreach(var version in versions.Where(v => v.IsReleased == false).OrderByDescending(v => v.Id))
+            foreach(var version in versions)
             {
                 verList.Add(new SelectListItem
                 {
-                    Value = version.Name,
-                    Text = version.Name
+                    Value = version,
+                    Text = version
                 });
             }
             searchModel.Versions = verList;
 
             var statList = new List<SelectListItem>();
 
-            statList.Add(new SelectListItem
-            {
-                Value = "All",
-                Text = "All"
-            });
+            //statList.Add(new SelectListItem
+            //{
+            //    Value = "All",
+            //    Text = "All"
+            //});
 
-            foreach (var status in statuses.OrderBy(s => s.Name))
+            foreach (var status in statuses)
             {
                 statList.Add(new SelectListItem
                 {
-                    Value = status.Name,
-                    Text = status.Name
+                    Value = status,
+                    Text = status
                 });
             }
             searchModel.Statuses = statList;
@@ -69,10 +76,10 @@ namespace NJira.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(SearchModel searchModel)
+        public ActionResult Index(SearchViewModel searchModel)
         {
             if (ModelState.IsValid)
-                return RedirectToAction("Index", "Issue", searchModel);
+                return RedirectToAction("Index", "Issue", new { searchModel.Version, searchModel.Status });
 
             return View();
         }

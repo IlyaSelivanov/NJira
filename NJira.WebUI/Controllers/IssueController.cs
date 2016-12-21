@@ -10,16 +10,18 @@ namespace NJira.WebUI.Controllers
     [Authorize]
     public class IssueController : Controller
     {
-        IIssueRepository repository;
+        IJiraRepository repository;
 
-        public IssueController(IIssueRepository issueRepository)
+        public IssueController(IJiraRepository issueRepository)
         {
             repository = issueRepository;
         }
 
         // GET: Issue
-        public ActionResult Index(SearchModel searchModel)
+        public ActionResult Index(SearchViewModel searchModel, Cart cart)
         {
+            cart.ClearCart();
+
             IssueViewModel issuesVM = new IssueViewModel();
 
             if (searchModel.Status == null && searchModel.Version == null)

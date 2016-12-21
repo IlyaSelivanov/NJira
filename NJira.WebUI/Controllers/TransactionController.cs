@@ -14,12 +14,11 @@ namespace NJira.WebUI.Controllers
     [Authorize]
     public class TransactionController : Controller
     {
-        IIssueRepository repository;
-        JiraContext jiraContext = new JiraContext();
+        IJiraRepository repository;
 
-        public TransactionController(IIssueRepository issueRepository)
+        public TransactionController(IJiraRepository jiraRepository)
         {
-            repository = issueRepository;
+            repository = jiraRepository;
         }
 
         public async Task<ActionResult> Index(Cart cart)
@@ -27,15 +26,15 @@ namespace NJira.WebUI.Controllers
             Cart c = cart;
             ViewBag.Count = c.Issues.Count;
 
-            IEnumerable<Atlassian.Jira.ProjectVersion> versions;
-            IEnumerable<Atlassian.Jira.JiraNamedEntity> trType;
-            IEnumerable<Atlassian.Jira.IssueResolution> resolutions;
+            List<string> versions = new List<string>();
+            List<string> trType = new List<string>();
+            List<Tuple<string, string>> resolutions = new List<Tuple<string, string>>();
 
             try
             {
-                versions = await jiraContext.Jira.Versions.GetVersionsAsync("PVINE");
-                trType = await repository.Issues.Where(i => i.Key == cart.Issues.First().Key).First().GetAvailableActionsAsync();
-                resolutions = await jiraContext.Jira.Resolutions.GetResolutionsAsync();
+                versions = await repository.GetVersionsAsync("PVINE");
+                trType = await repository.GetAvailableStatusesAsync(cart.Issues.First().Key);
+                resolutions = await repository.GetResolutionsAsync();
             }
             catch (Exception ex)
             {
@@ -46,34 +45,34 @@ namespace NJira.WebUI.Controllers
             TransactionSettingsViewModel settings = new TransactionSettingsViewModel();
 
             var verList = new List<SelectListItem>();
-            foreach (var version in versions.Where(v => v.IsReleased == false).OrderByDescending(v => v.Id))
+            foreach (var version in versions)
             {
                 verList.Add(new SelectListItem
                 {
-                    Value = version.Name,
-                    Text = version.Name
+                    Value = version,
+                    Text = version
                 });
             }
             settings.Versions = verList;
 
             var typeList = new List<SelectListItem>();
-            foreach (var type in trType.OrderBy(s => s.Name))
+            foreach (var type in trType)
             {
                 typeList.Add(new SelectListItem
                 {
-                    Value = type.Name,
-                    Text = type.Name
+                    Value = type,
+                    Text = type
                 });
             }
             settings.Types = typeList;
 
             var resList = new List<SelectListItem>();
-            foreach (var resolution in resolutions.OrderBy(s => s.Name))
+            foreach (var resolution in resolutions)
             {
                 resList.Add(new SelectListItem
                 {
-                    Value = resolution.Id,
-                    Text = resolution.Name
+                    Value = resolution.Item1,
+                    Text = resolution.Item2
                 });
             }
             settings.Resolutions = resList;
@@ -127,10 +126,10 @@ namespace NJira.WebUI.Controllers
                         issue.CustomFields["Code location"].Values = new string[] { settings.CodeLocation };
                 }
 
-                issue.Resolution = new Atlassian.Jira.IssueResolution(settings.Resolution.Name);
+                issue.Resolution = new Atlassian.Jira.IssueResolution(settings.Resolution);
                 issue.Assignee = issue.Reporter;
                 await issue.AddCommentAsync(settings.Comment);
-                await issue.WorkflowTransitionAsync(settings.Type.Name);
+                await issue.WorkflowTransitionAsync(settings.Type);
                 await issue.SaveChangesAsync();
             }
 

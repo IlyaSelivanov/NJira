@@ -81,15 +81,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IIssueRepository.cs" />
-    <Compile Include="Concrete\IssueRepository.cs" />
+    <Compile Include="Abstract\IJiraRepository.cs" />
+    <Compile Include="Concrete\JiraRepository.cs" />
     <Compile Include="Concrete\JiraContext.cs" />
     <Compile Include="Entities\Cart.cs" />
     <Compile Include="Entities\Issue.cs" />
-    <Compile Include="Entities\Resolution.cs" />
-    <Compile Include="Entities\SearchModel.cs" />
-    <Compile Include="Entities\TransactionType.cs" />
-    <Compile Include="Entities\FixVersion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

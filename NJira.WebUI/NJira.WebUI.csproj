@@ -237,6 +237,7 @@
     <Compile Include="Models\Auth\LoginModel.cs" />
     <Compile Include="Models\Auth\RegisterModel.cs" />
     <Compile Include="Models\IssueViewModel.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\TransactionSettingsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

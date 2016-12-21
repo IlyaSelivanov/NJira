@@ -22,12 +22,12 @@
 
                     <div class="form-group">
                         @Html.LabelFor(m => m.Type)
-                        @Html.DropDownListFor(m => m.Type.Name, Model.Types, null, new { @class = "form-control" })
+                        @Html.DropDownListFor(m => m.Type, Model.Types, null, new { @class = "form-control" })
                     </div>
 
                     <div class="form-group">
                         @Html.LabelFor(m => m.Resolution)
-                        @Html.DropDownListFor(m => m.Resolution.Name, Model.Resolutions, null, new { @class = "form-control" })
+                        @Html.DropDownListFor(m => m.Resolution, Model.Resolutions, null, new { @class = "form-control" })
                     </div>
 
                     <div class="form-group">

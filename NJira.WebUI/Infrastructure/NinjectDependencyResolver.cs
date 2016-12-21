@@ -27,7 +27,7 @@ namespace NJira.WebUI.Infrastructure
         }
         private void AddBindings()
         {
-            kernel.Bind<IIssueRepository>().To<IssueRepository>();
+            kernel.Bind<IJiraRepository>().To<JiraRepository>();
         }
     }
 }

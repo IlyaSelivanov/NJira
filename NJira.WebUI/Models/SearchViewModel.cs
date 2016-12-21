@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace NJira.Domain.Entities
+namespace NJira.WebUI.Models
 {
-    public class SearchModel
+    public class SearchViewModel
     {
         [Required]
         [Display(Name = "Version")]

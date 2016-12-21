@@ -9,9 +9,9 @@ namespace NJira.WebUI.Models
 {
     public class TransactionSettingsViewModel
     {
-        public FixVersion Version { get; set; }
-        public TransactionType Type { get; set; }
-        public Resolution Resolution { get; set; }
+        public string Version { get; set; }
+        public string Type { get; set; }
+        public string Resolution { get; set; }
         public string CodeLocation { get; set; }
         public string Comment { get; set; }
 

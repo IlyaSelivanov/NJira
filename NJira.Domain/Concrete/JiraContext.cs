@@ -1,14 +1,16 @@
 ﻿using Atlassian.Jira;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NJira.Domain.Concrete
 {
     public class JiraSettings
     {
         public string Url = @"http://pm.quartsoft.com";
-        public string User = "";
-        public string Password = "";
+        public string User = "ilyaqs";
+        public string Password = "kjkbnf23q";
     }
 
     public class JiraContext
@@ -18,6 +20,8 @@ namespace NJira.Domain.Concrete
 
         public JiraContext()
         {
+            jira = Jira.CreateRestClient(jiraSettings.Url, jiraSettings.User, jiraSettings.Password);
+            jira.MaxIssuesPerRequest = 1000;
         }
 
         public Jira Jira
@@ -31,16 +35,13 @@ namespace NJira.Domain.Concrete
             }
         }
 
-        public IQueryable<Issue> Issues
-        {
-            get
-            {
-                if (jira == null)
-                    InitJira();
-
-                return jira.Issues.Queryable;
-            }
-        }
+        //public IQueryable<Issue> Issues
+        //{
+        //    get
+        //    {
+        //        return Jira.Issues.Queryable;
+        //    }
+        //}
 
         private void InitJira()
         {
