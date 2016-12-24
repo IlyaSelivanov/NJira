@@ -1,4 +1,5 @@
-﻿using NJira.Domain.Abstract;
+﻿
+using NJira.Domain.Abstract;
 using NJira.Domain.Concrete;
 using NJira.Domain.Entities;
 using NJira.WebUI.Models;
@@ -114,6 +115,9 @@ namespace NJira.WebUI.Controllers
 
         public async Task<ActionResult> Transact(Cart cart, TransactionSettingsViewModel settings)
         {
+            EFTransactionRepository trRepository = new EFTransactionRepository();
+            DateTime dateTime = DateTime.Now;
+
             foreach (var i in cart.Issues)
             {
                 var issue = repository.Issues.Where(x => x.Key == i.Key).First();
@@ -131,6 +135,21 @@ namespace NJira.WebUI.Controllers
                 await issue.AddCommentAsync(settings.Comment);
                 await issue.WorkflowTransitionAsync(settings.Type);
                 await issue.SaveChangesAsync();
+
+                trRepository.SaveTransaction(new Transaction
+                {
+                    Id = 0,
+                    Date = dateTime,
+                    Key = issue.Key.Value,
+                    Summary = issue.Summary,
+                    StatusFrom = issue.Status.Name,
+                    StatusTo = settings.Type,
+                    ResolutionFrom = issue.Resolution.Id,
+                    ResolutionTo = settings.Resolution,
+                    AssigneeFrom = issue.Assignee,
+                    AssigneeTo = issue.Reporter,
+                    Reporter = issue.Reporter,
+                });
             }
 
             cart.Issues.Clear();

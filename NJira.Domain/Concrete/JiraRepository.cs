@@ -59,7 +59,7 @@ namespace NJira.Domain.Concrete
         public async Task<List<string>> GetAvailableStatusesAsync(string key)
         {
             List<string> statList = new List<string>();
-            var available = await Issues.Where(i => i.Key == key).First().GetAvailableActionsAsync();
+            var available = await Issues.Where(i => i.Key == key).FirstOrDefault().GetAvailableActionsAsync();
 
             foreach (var status in available)
                 statList.Add(status.Name);
