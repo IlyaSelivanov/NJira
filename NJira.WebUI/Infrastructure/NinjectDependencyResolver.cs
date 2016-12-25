@@ -28,6 +28,7 @@ namespace NJira.WebUI.Infrastructure
         private void AddBindings()
         {
             kernel.Bind<IJiraRepository>().To<JiraRepository>();
+            kernel.Bind<ITransactionRepository>().To<EFTransactionRepository>();
         }
     }
 }

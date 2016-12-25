@@ -15,11 +15,13 @@ namespace NJira.WebUI.Controllers
     [Authorize]
     public class TransactionController : Controller
     {
-        IJiraRepository repository;
+        IJiraRepository jRepository;
+        ITransactionRepository dbRepository;
 
-        public TransactionController(IJiraRepository jiraRepository)
+        public TransactionController(IJiraRepository jiraRepository, ITransactionRepository dbRepo)
         {
-            repository = jiraRepository;
+            jRepository = jiraRepository;
+            dbRepository = dbRepo;
         }
 
         public async Task<ActionResult> Index(Cart cart)
@@ -33,9 +35,9 @@ namespace NJira.WebUI.Controllers
 
             try
             {
-                versions = await repository.GetVersionsAsync("PVINE");
-                trType = await repository.GetAvailableStatusesAsync(cart.Issues.First().Key);
-                resolutions = await repository.GetResolutionsAsync();
+                versions = await jRepository.GetVersionsAsync("PVINE");
+                trType = await jRepository.GetAvailableStatusesAsync(cart.Issues.First().Key);
+                resolutions = await jRepository.GetResolutionsAsync();
             }
             catch (Exception ex)
             {
@@ -115,12 +117,11 @@ namespace NJira.WebUI.Controllers
 
         public async Task<ActionResult> Transact(Cart cart, TransactionSettingsViewModel settings)
         {
-            EFTransactionRepository trRepository = new EFTransactionRepository();
             DateTime dateTime = DateTime.Now;
 
             foreach (var i in cart.Issues)
             {
-                var issue = repository.Issues.Where(x => x.Key == i.Key).First();
+                var issue = jRepository.Issues.Where(x => x.Key == i.Key).First();
 
                 if (!settings.CodeLocation.Equals(string.Empty))
                 {
@@ -136,13 +137,13 @@ namespace NJira.WebUI.Controllers
                 await issue.WorkflowTransitionAsync(settings.Type);
                 await issue.SaveChangesAsync();
 
-                trRepository.SaveTransaction(new Transaction
+                dbRepository.SaveTransaction(new Transaction
                 {
                     Id = 0,
                     Date = dateTime,
                     Key = issue.Key.Value,
                     Summary = issue.Summary,
-                    StatusFrom = issue.Status.Name,
+                    StatusFrom = i.Status,
                     StatusTo = settings.Type,
                     ResolutionFrom = issue.Resolution.Id,
                     ResolutionTo = settings.Resolution,
@@ -154,7 +155,17 @@ namespace NJira.WebUI.Controllers
 
             cart.Issues.Clear();
 
-            return View();
+            return RedirectToAction("History");
+        }
+
+        public ActionResult History()
+        {
+            TransactionHistoryViewModel history = new TransactionHistoryViewModel();
+
+            foreach (var record in dbRepository.Transactions.OrderBy(l => l.Date))
+                history.Transactions.Add(record);
+
+            return View(history);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using NJira.Domain.Entities;
+﻿using NJira.Domain.Abstract;
+using NJira.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NJira.Domain.Concrete
 {
-    public class EFTransactionRepository
+    public class EFTransactionRepository : ITransactionRepository
     {
         private EFDbContext context = new EFDbContext();
         public IEnumerable<Transaction> Transactions

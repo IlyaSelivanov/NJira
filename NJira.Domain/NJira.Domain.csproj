@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IJiraRepository.cs" />
+    <Compile Include="Abstract\ITransactionRepository.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\JiraRepository.cs" />
     <Compile Include="Concrete\JiraContext.cs" />
