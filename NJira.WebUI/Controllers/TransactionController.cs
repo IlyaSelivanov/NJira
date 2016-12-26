@@ -132,7 +132,20 @@ namespace NJira.WebUI.Controllers
                 }
 
                 issue.Resolution = new Atlassian.Jira.IssueResolution(settings.Resolution);
-                issue.Assignee = issue.Reporter;
+
+                switch(settings.Type.ToLower())
+                {
+                    case "tested on dev54":
+                        issue.Assignee = "grancer";
+                        break;
+                    case "tested on satge":
+                        issue.Assignee = "grancer";
+                        break;
+                    default:
+                        issue.Assignee = issue.Reporter;
+                        break;
+                }
+                
                 await issue.AddCommentAsync(settings.Comment);
                 await issue.WorkflowTransitionAsync(settings.Type);
                 await issue.SaveChangesAsync();
