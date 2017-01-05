@@ -121,7 +121,7 @@ namespace NJira.WebUI.Controllers
 
             foreach (var i in cart.Issues)
             {
-                var issue = jRepository.Issues.Where(x => x.Key == i.Key).First();
+                var issue = jRepository.Issues.Where(x => x.Key == i.Key).FirstOrDefault();
 
                 if (!settings.CodeLocation.Equals(string.Empty))
                 {
@@ -136,10 +136,10 @@ namespace NJira.WebUI.Controllers
                 switch(settings.Type.ToLower())
                 {
                     case "tested on dev54":
-                        issue.Assignee = "grancer";
+                        issue.Assignee = "godkot";
                         break;
                     case "tested on satge":
-                        issue.Assignee = "grancer";
+                        issue.Assignee = "godkot";
                         break;
                     default:
                         issue.Assignee = issue.Reporter;

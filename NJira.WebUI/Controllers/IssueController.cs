@@ -45,7 +45,7 @@ namespace NJira.WebUI.Controllers
                         Key = issue.Key.Value,
                         Summary = issue.Summary,
                         Status = issue.Status.Name,
-                        Resolution = issue.Resolution.Name,
+                        Resolution = (issue.Resolution == null) ? "Unresolved" : issue.Resolution.Name,
                         Assignee = issue.Assignee,
                         Reporter = issue.Reporter
                     },
