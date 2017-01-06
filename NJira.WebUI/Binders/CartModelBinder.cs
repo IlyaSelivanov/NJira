@@ -24,7 +24,6 @@ namespace NJira.WebUI.Binders
 
                 if (controllerContext.HttpContext.Session != null)
                     controllerContext.HttpContext.Session[sessionKey] = cart;
-
             }
 
             return cart;

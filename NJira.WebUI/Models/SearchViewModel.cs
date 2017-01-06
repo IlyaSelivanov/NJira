@@ -18,6 +18,9 @@ namespace NJira.WebUI.Models
         [Display(Name = "Status")]
         public string Status { get; set; }
 
+        [Display(Name = "Assignee")]
+        public string Assignee { get; set; }
+
         public IEnumerable<SelectListItem> Versions { get; set; }
         public IEnumerable<SelectListItem> Statuses { get; set; }
     }

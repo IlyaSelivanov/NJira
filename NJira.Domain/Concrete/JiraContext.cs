@@ -35,14 +35,6 @@ namespace NJira.Domain.Concrete
             }
         }
 
-        //public IQueryable<Issue> Issues
-        //{
-        //    get
-        //    {
-        //        return Jira.Issues.Queryable;
-        //    }
-        //}
-
         private void InitJira()
         {
             jira = Jira.CreateRestClient(jiraSettings.Url, jiraSettings.User, jiraSettings.Password);

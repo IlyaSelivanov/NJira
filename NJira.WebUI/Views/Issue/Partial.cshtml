@@ -1,0 +1,24 @@
+﻿@model NJira.WebUI.Models.SearchViewModel
+
+<div class="row">
+    @using (Html.BeginForm("Index", "Issue"))
+    {
+        <div class="col-lg-2">
+            <p></p>
+            @Html.DropDownListFor(m => m.Version, Model.Versions, null, new { @class = "form-control" })
+        </div>
+        <div class="col-lg-2">
+            <p></p>
+            @Html.DropDownListFor(m => m.Status, Model.Statuses, null, new { @class = "form-control" })
+        </div>
+        <div class="col-lg-2">
+            <p></p>
+            @Html.TextBoxFor(m => m.Assignee, null, new { @class = "form-control" })
+        </div>
+        <div class="col-lg-2">
+            <p></p>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    }
+</div>
+

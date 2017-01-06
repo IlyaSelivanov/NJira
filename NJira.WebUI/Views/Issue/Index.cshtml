@@ -4,6 +4,12 @@
     ViewBag.Title = "Index";
 }
 
+@{ 
+    var searchModel = (NJira.WebUI.Models.SearchViewModel)ViewBag.SearchModel;
+}
+
+@Html.Partial("Partial", @searchModel)
+
 <h2>Total: @ViewBag.Count</h2>
 
 @using (Html.BeginForm("AddToCart", "Transaction"))

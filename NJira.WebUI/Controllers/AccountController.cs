@@ -88,7 +88,7 @@ namespace NJira.WebUI.Controllers
 
 
                     if (string.IsNullOrEmpty(returnUrl))
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Issue");
                     return Redirect(returnUrl);
                 }
             }
