@@ -104,7 +104,7 @@ namespace NJira.WebUI.Controllers
             cart.ClearCart();
 
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Issue");
         }
     }
 }
