@@ -1,4 +1,5 @@
-﻿using NJira.Domain.Abstract;
+﻿using Newtonsoft.Json;
+using NJira.Domain.Abstract;
 using NJira.Domain.Concrete;
 using NJira.Domain.Entities;
 using NJira.WebUI.Models;
@@ -15,6 +16,7 @@ namespace NJira.WebUI.Controllers
     public class HomeController : Controller
     {
         IJiraRepository repository;
+        JsonSerializerSettings _jsonSetting = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
 
         public HomeController(IJiraRepository issueRepository)
         {
@@ -22,105 +24,35 @@ namespace NJira.WebUI.Controllers
         }
 
         // GET: Home
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            //List<string> versions;
-            //List<string> statuses;
-
-            //try
-            //{
-            //    versions = await repository.GetVersionsAsync("PVINE");
-            //    statuses = await repository.GetStatusesAsync();
-            //}
-            //catch(Exception ex)
-            //{
-            //    var exc = ex.Message;
-            //    return RedirectToAction("Oops", "Error");
-            //}
-
-            //var searchModel = new SearchViewModel();
-
-            //var verList = new List<SelectListItem>();
-            //foreach(var version in versions)
-            //{
-            //    verList.Add(new SelectListItem
-            //    {
-            //        Value = version,
-            //        Text = version
-            //    });
-            //}
-            //searchModel.Versions = verList;
-
-            //var statList = new List<SelectListItem>();
-
-            //foreach (var status in statuses)
-            //{
-            //    statList.Add(new SelectListItem
-            //    {
-            //        Value = status,
-            //        Text = status
-            //    });
-            //}
-            //searchModel.Statuses = statList;
-
-            SearchViewModel searchModel = await InitSearchModel();
-
-            if (searchModel.Statuses == null || searchModel.Versions == null)
-                return RedirectToAction("Oops", "Error");
-
-            return View(searchModel);
-        }
-
-        [HttpPost]
-        public ActionResult Index(SearchViewModel searchModel)
-        {
-            if (ModelState.IsValid)
-                return RedirectToAction("Index", "Issue", new { searchModel.Version, searchModel.Status });
+            ViewBag.DataPoints = JsonConvert.SerializeObject(GetRandomDataForCategoryAxis(5), _jsonSetting);
 
             return View();
         }
 
-        private async Task<SearchViewModel> InitSearchModel()
+        private static List<DataPoint> GetRandomDataForCategoryAxis(int count)
         {
-            SearchViewModel model = new SearchViewModel();
+            List<DataPoint> _dataPoints = new List<DataPoint>();
+            Random random = new Random(DateTime.Now.Millisecond);
 
-            List<string> versions = new List<string>();
-            List<string> statuses = new List<string>();
+            double y = 50;
+            DateTime dateTime = new DateTime(2006, 01, 1, 0, 0, 0);
+            string label = "";
 
-            try
+            _dataPoints = new List<DataPoint>();
+
+
+            for (int i = 0; i < count; i++)
             {
-                versions = await repository.GetVersionsAsync("PVINE");
-                statuses = await repository.GetStatusesAsync();
-            }
-            catch (Exception ex)
-            {
-                var exc = ex.Message;
+                y = y + (random.Next(0, 20) - 10);
+                label = dateTime.ToString("dd MMM");
+
+                _dataPoints.Add(new DataPoint(y, label));
+                dateTime = dateTime.AddDays(1);
             }
 
-            var verList = new List<SelectListItem>();
-            foreach (var version in versions)
-            {
-                verList.Add(new SelectListItem
-                {
-                    Value = version,
-                    Text = version
-                });
-            }
-            model.Versions = verList;
-
-            var statList = new List<SelectListItem>();
-
-            foreach (var status in statuses)
-            {
-                statList.Add(new SelectListItem
-                {
-                    Value = status,
-                    Text = status
-                });
-            }
-            model.Statuses = statList;
-
-            return model;
+            return _dataPoints;
         }
     }
 }

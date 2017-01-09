@@ -8,7 +8,7 @@
     var searchModel = (NJira.WebUI.Models.SearchViewModel)ViewBag.SearchModel;
 }
 
-@Html.Partial("Partial", @searchModel)
+@Html.Partial("IssueSearchPartial", @searchModel)
 
 <h2>Total: @ViewBag.Count</h2>
 
