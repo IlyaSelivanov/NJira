@@ -13,10 +13,12 @@ namespace NJira.WebUI.Controllers
     public class IssueController : Controller
     {
         IJiraRepository repository;
+        string error;
 
         public IssueController(IJiraRepository issueRepository)
         {
             repository = issueRepository;
+            error = string.Empty;
         }
 
         // GET: Issue
@@ -57,7 +59,15 @@ namespace NJira.WebUI.Controllers
                 ViewBag.Count = issues.Count();
             }
             
-            ViewBag.SearchModel = await InitSearchModel();
+            var model = await InitSearchModel();
+
+            if (model != null)
+                ViewBag.SearchModel = model;
+            else
+            {
+                TempData["Error"] = error;
+                return RedirectToAction("Oops", "Error");
+            }
 
             return View(issuesVM);
         }
@@ -82,7 +92,8 @@ namespace NJira.WebUI.Controllers
             }
             catch (Exception ex)
             {
-                var exc = ex.Message;
+                error = String.Format("Exception: {0}", ex.Message);
+                return null;
             }
 
             var verList = new List<SelectListItem>();

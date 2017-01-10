@@ -88,7 +88,7 @@ namespace NJira.WebUI.Controllers
 
 
                     if (string.IsNullOrEmpty(returnUrl))
-                        return RedirectToAction("Index", "Issue");
+                        return RedirectToAction("Index", "Home");
                     return Redirect(returnUrl);
                 }
             }
@@ -104,7 +104,7 @@ namespace NJira.WebUI.Controllers
             cart.ClearCart();
 
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Issue");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

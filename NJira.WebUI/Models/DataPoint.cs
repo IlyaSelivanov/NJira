@@ -15,6 +15,13 @@ namespace NJira.WebUI.Models
             this.Label = label;
         }
 
+        public DataPoint(double y, string legend, string label)
+        {
+            this.Y = y;
+            this.Legend = legend;
+            this.Label = label;
+        }
+
         public DataPoint(double x, double y)
         {
             this.X = x;
@@ -46,6 +53,10 @@ namespace NJira.WebUI.Models
         //Explicitly setting the name to be used while serializing to JSON. 
         [DataMember(Name = "label")]
         public string Label = null;
+
+        //Explicitly setting the name to be used while serializing to JSON. 
+        [DataMember(Name = "legendText")]
+        public string Legend = null;
 
         //Explicitly setting the name to be used while serializing to JSON.
         [DataMember(Name = "y")]

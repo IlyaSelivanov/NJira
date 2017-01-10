@@ -16,6 +16,7 @@ namespace NJira.WebUI.Controllers
 
         public ActionResult Oops()
         {
+            ViewBag.Error = (TempData.Count != 0) ? TempData["Error"].ToString() : string.Empty;
             return View();
         }
     }

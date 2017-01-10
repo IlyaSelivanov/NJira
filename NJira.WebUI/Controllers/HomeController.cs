@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace NJira.WebUI.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
         IJiraRepository repository;
@@ -26,30 +26,44 @@ namespace NJira.WebUI.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            ViewBag.DataPoints = JsonConvert.SerializeObject(GetRandomDataForCategoryAxis(5), _jsonSetting);
+            var issues = from i in repository.Issues
+                         where i.FixVersions == "1.32.5"
+                         orderby i.Status
+                         select i;
+
+            string status = "";
+            double total = (double)issues.Count();
+            double count = 0;
+            List<Tuple<string, double>> result = new List<Tuple<string, double>>();
+
+            foreach (var issue in issues)
+            {
+                if (!issue.Status.Name.Equals(status))
+                {
+                    result.Add(new Tuple<string, double>( status, count));
+                    status = issue.Status.Name;
+                    count = 1;
+                }
+                else
+                    count++;
+            }
+            result.Add(new Tuple<string, double>(status, count));
+            result.RemoveAt(0);
+
+            ViewBag.DataPoints = JsonConvert.SerializeObject(GetPieData(result, total), _jsonSetting);
 
             return View();
         }
 
-        private static List<DataPoint> GetRandomDataForCategoryAxis(int count)
+        private static List<DataPoint> GetPieData(List<Tuple<string, double>> result, double count)
         {
             List<DataPoint> _dataPoints = new List<DataPoint>();
-            Random random = new Random(DateTime.Now.Millisecond);
 
-            double y = 50;
-            DateTime dateTime = new DateTime(2006, 01, 1, 0, 0, 0);
-            string label = "";
-
-            _dataPoints = new List<DataPoint>();
-
-
-            for (int i = 0; i < count; i++)
+            foreach(var res in result)
             {
-                y = y + (random.Next(0, 20) - 10);
-                label = dateTime.ToString("dd MMM");
-
-                _dataPoints.Add(new DataPoint(y, label));
-                dateTime = dateTime.AddDays(1);
+                _dataPoints.Add(new DataPoint(Math.Round((res.Item2 / count) * 100, 2),
+                    res.Item1, 
+                    string.Format("({0})", res.Item2.ToString())));
             }
 
             return _dataPoints;
