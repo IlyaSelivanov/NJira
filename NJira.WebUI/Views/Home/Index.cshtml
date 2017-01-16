@@ -1,4 +1,8 @@
-﻿<div id="chartContainer"></div>
+﻿<h3>Tasks (total count): @ViewBag.Total</h3>
+
+<div id="chartContainer" style="width: 90%; height:400px;"></div>
+<div id="chartContainer_1" style="width: 90%; height:400px;"></div>
+<div id="chartContainer_2" style="width: 90%; height:400px;"></div>
 
 <script src="~/Scripts/jquery-3.1.1.min.js"></script>
 <script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
@@ -6,7 +10,7 @@
     $(function () {
         var chart = new CanvasJS.Chart("chartContainer", {
             title: {
-                text: "Issues (v1.32.5):"
+                text: "Issues (v1.32.6):"
             },
             animationEnabled: true,
             legend: {
@@ -15,7 +19,7 @@
                 fontSize: 20,
                 fontFamily: "Helvetica"
             },
-            theme: "theme2",
+            theme: "theme3",
             data: [
             {
                 type: "pie",
@@ -25,21 +29,43 @@
                 startAngle: -20,
                 showInLegend: true,
                 toolTipContent: "{legendText} {y}%",
-                //dataPoints: [
-                //    { y: 72.48, legendText: "Google", label: "Google" },
-                //    { y: 10.39, legendText: "Bing", label: "Bing" },
-                //    { y: 7.78, legendText: "Yahoo!", label: "Yahoo!" },
-                //    { y: 7.14, legendText: "Baidu", label: "Baidu" },
-                //    { y: 0.22, legendText: "Ask", label: "Ask" },
-                //    { y: 0.15, legendText: "AOL", label: "AOL" },
-                //    { y: 1.84, legendText: "Others", label: "Others" }
-                //],
-
-                //You can add dynamic data from the controller as shown below. Check the controller and uncomment the line which generates dataPoints.
                 dataPoints: @Html.Raw(ViewBag.DataPoints),
             }
             ]
         });
         chart.render();
+        chart = {};
+
+        var chart1 = new CanvasJS.Chart("chartContainer_1", {
+            theme: "theme3",//theme1
+            title:{
+                text: "Open tasks per user (v1.32.6):"
+            },
+            animationEnabled: false,   // change to true
+            data: [
+            {
+                type: "column",
+                dataPoints: @Html.Raw(ViewBag.DataPoints1),
+            }
+            ]
+        });
+        chart1.render();
+        chart1 = {};
+
+        var chart2 = new CanvasJS.Chart("chartContainer_2", {
+            theme: "theme3",//theme1
+            title:{
+                text: "Tasks for review per user (v1.32.6):"
+            },
+            animationEnabled: false,   // change to true
+            data: [
+            {
+                type: "column",
+                dataPoints: @Html.Raw(ViewBag.DataPoints2),
+            }
+            ]
+        });
+        chart2.render();
+        chart2 = {};
     });
 </script>
