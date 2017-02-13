@@ -27,7 +27,7 @@ namespace NJira.WebUI.Controllers
         public ActionResult Index()
         {
             var issues = from i in repository.Issues
-                         where i.FixVersions == "1.32.7"
+                         where i.FixVersions == "1.32.8"
                          orderby i.Status
                          select i;
 
